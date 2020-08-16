@@ -3,7 +3,7 @@ import { useQuery, gql } from '@apollo/client';
 import Link from './Link';
 
 const LINKS_QUERY = gql`
-  {
+  query Feed {
     feed {
       links {
         id
