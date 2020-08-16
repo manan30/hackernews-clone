@@ -1,24 +1,28 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { useQuery, gql } from '@apollo/client';
 import Link from './Link';
 
-const linksToRender = [
+const LINKS_QUERY = gql`
   {
-    id: '1',
-    description: 'Prisma turns your database into a GraphQL API 😎',
-    url: 'https://www.prismagraphql.com'
-  },
-  {
-    id: '2',
-    description: 'The best GraphQL client',
-    url: 'https://www.apollographql.com/docs/react/'
+    feed {
+      links {
+        id
+        description
+        url
+      }
+    }
   }
-];
+`;
 
 function LinksList() {
+  const { loading, error, data } = useQuery(LINKS_QUERY);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error...</div>;
+
   return (
     <div>
-      {linksToRender.map((link) => (
+      {data.feed.links.map((link) => (
         // eslint-disable-next-line jsx-a11y/anchor-is-valid
         <Link link={link} />
       ))}
