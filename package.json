@@ -7,9 +7,9 @@
   "author": "Manan Joshi",
   "license": "MIT",
   "scripts": {
-    "start:client": "parcel public/index.html --open",
-    "start:server": "node server/src/index.js",
-    "prisma": "prisma server",
+    "start": "parcel public/index.html --open",
+    "start:server": "cd server && yarn start",
+    "deploy:prisma": "cd server && yarn prisma deploy",
     "build": "parcel build public/index.html"
   },
   "devDependencies": {
@@ -22,16 +22,11 @@
     "eslint-plugin-react": "7.20.6",
     "eslint-plugin-react-hooks": "4.0.8",
     "parcel-bundler": "1.12.4",
-    "prettier": "2.0.5",
-    "prisma": "1.34.10"
+    "prettier": "2.0.5"
   },
   "dependencies": {
     "@apollo/client": "3.1.3",
-    "bcryptjs": "2.4.3",
     "graphql": "15.3.0",
-    "graphql-yoga": "1.18.3",
-    "jsonwebtoken": "8.5.1",
-    "prisma-client-lib": "1.34.10",
     "react": "16.13.1",
     "react-dom": "16.13.1"
   }
