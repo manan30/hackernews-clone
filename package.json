@@ -6,6 +6,10 @@
   "repository": "https://github.com/manan30/hackernews-clone",
   "author": "Manan Joshi",
   "license": "MIT",
+  "scripts": {
+    "start": "parcel public/index.html --open",
+    "build": "parcel build public/index.html"
+  },
   "devDependencies": {
     "eslint": "7.7.0",
     "eslint-config-airbnb": "18.2.0",
@@ -15,6 +19,11 @@
     "eslint-plugin-prettier": "3.1.4",
     "eslint-plugin-react": "7.20.6",
     "eslint-plugin-react-hooks": "4.0.8",
+    "parcel-bundler": "1.12.4",
     "prettier": "2.0.5"
+  },
+  "dependencies": {
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
   }
 }
