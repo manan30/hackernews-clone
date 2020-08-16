@@ -1,7 +1,12 @@
 import React from 'react';
+import LinksList from './components/LinksList';
 
 function App() {
-  return <div>Hello Friend</div>;
+  return (
+    <div>
+      <LinksList />
+    </div>
+  );
 }
 
 export default App;
