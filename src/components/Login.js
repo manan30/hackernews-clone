@@ -15,7 +15,7 @@ function Login() {
     history.push('/');
   };
 
-  const [login, { data, loading, error }] = useMutation(LOGIN_MUTATION, {
+  const [login, { loading, error }] = useMutation(LOGIN_MUTATION, {
     onCompleted: (d) => {
       saveTokenData(d.login.token);
     },

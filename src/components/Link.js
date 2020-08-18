@@ -4,7 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useAuth } from '../context/AuthContext';
 import { timeDifferenceForDate } from '../utils/Constants';
-import { VOTE_MUTATION } from '../utils/Queries';
+import { VOTE_MUTATION, FEED_QUERY } from '../utils/Queries';
 
 const Container = styled.div`
   width: calc(100% - 2rem);
@@ -41,10 +41,20 @@ const Row = styled.div`
   }
 `;
 
-function Link({ link, index, updateCache }) {
+function Link({ link, index }) {
   const [vote] = useMutation(VOTE_MUTATION, {
     update(store, { data: { vote: v } }) {
-      updateCache(store, v, link.id);
+      const newData = store.readQuery({ query: FEED_QUERY });
+
+      const updatedLinks = newData.feed.links.map((l) => {
+        if (l.id === link.id) {
+          return { ...l, votes: v.link.votes };
+        }
+        return link;
+      });
+
+      const updatedData = { feed: { links: updatedLinks } };
+      store.writeQuery({ query: FEED_QUERY, updatedData });
     }
   });
   const { authToken } = useAuth();

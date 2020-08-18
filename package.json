@@ -10,7 +10,9 @@
     "start": "parcel public/index.html --open",
     "start:server": "cd server && yarn start",
     "deploy:prisma": "cd server && yarn prisma deploy",
-    "build": "parcel build public/index.html"
+    "build": "parcel build public/index.html",
+    "lint": "eslint src/**/*.js",
+    "format": "prettier --write src/**/*"
   },
   "devDependencies": {
     "eslint": "7.7.0",
