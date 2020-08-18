@@ -1,30 +1,8 @@
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import React from 'react';
 import styled from 'styled-components';
 import Link from './Link';
-
-const FEED_QUERY = gql`
-  query Feed {
-    feed {
-      links {
-        id
-        createdAt
-        description
-        url
-        postedBy {
-          id
-          name
-        }
-        votes {
-          id
-          user {
-            id
-          }
-        }
-      }
-    }
-  }
-`;
+import { FEED_QUERY } from '../utils/Queries';
 
 const LinksContainer = styled.div`
   height: calc(100vh - 5rem);

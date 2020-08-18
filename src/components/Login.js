@@ -1,16 +1,9 @@
+import { useMutation } from '@apollo/client';
 import React, { useState } from 'react';
-import { gql, useMutation } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
-import { AUTH_TOKEN } from '../utils/Constants';
 import { useAuth } from '../context/AuthContext';
-
-const LOGIN_MUTATION = gql`
-  mutation LoginMutation($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      token
-    }
-  }
-`;
+import { LOGIN_MUTATION } from '../utils/Queries';
+import { AUTH_TOKEN } from '../utils/Constants';
 
 function Login() {
   const history = useHistory();

@@ -1,22 +1,21 @@
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import React, { useState } from 'react';
-
-const CREATE_LINK_MUTATION = gql`
-  mutation createLink($description: String!, $url: String!) {
-    post(description: $description, url: $url) {
-      id
-      createdAt
-      description
-      url
-    }
-  }
-`;
+import { CREATE_LINK_MUTATION, FEED_QUERY } from '../utils/Queries';
 
 function CreateLink() {
   const [url, setURL] = useState('');
   const [description, setDescription] = useState('');
 
-  const [post, data] = useMutation(CREATE_LINK_MUTATION);
+  const [post] = useMutation(CREATE_LINK_MUTATION, {
+    update(store, { data: { post: p } }) {
+      const data = store.readQuery({ query: FEED_QUERY });
+      data.feed.links.unshift(p);
+      store.writeQuery({
+        query: FEED_QUERY,
+        data
+      });
+    }
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();

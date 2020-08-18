@@ -1,29 +1,10 @@
-import React from 'react';
+import { useMutation } from '@apollo/client';
 import PropTypes from 'prop-types';
+import React from 'react';
 import styled from 'styled-components';
-import { gql, useMutation } from '@apollo/client';
 import { useAuth } from '../context/AuthContext';
 import { timeDifferenceForDate } from '../utils/Constants';
-
-const VOTE_MUTATION = gql`
-  mutation VoteMutation($linkId: ID!) {
-    vote(linkId: $linkId) {
-      id
-      link {
-        id
-        votes {
-          id
-          user {
-            id
-          }
-        }
-      }
-      user {
-        id
-      }
-    }
-  }
-`;
+import { VOTE_MUTATION } from '../utils/Queries';
 
 const Container = styled.div`
   width: calc(100% - 2rem);
