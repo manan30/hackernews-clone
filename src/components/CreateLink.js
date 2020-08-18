@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { gql, useMutation } from '@apollo/client';
+import React, { useState } from 'react';
 
-const CREATE_LINK = gql`
+const CREATE_LINK_MUTATION = gql`
   mutation createLink($description: String!, $url: String!) {
     post(description: $description, url: $url) {
       id
@@ -17,7 +16,7 @@ function CreateLink() {
   const [url, setURL] = useState('');
   const [description, setDescription] = useState('');
 
-  const [post, data] = useMutation(CREATE_LINK);
+  const [post, data] = useMutation(CREATE_LINK_MUTATION);
 
   const handleSubmit = (e) => {
     e.preventDefault();

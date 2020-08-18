@@ -1,18 +1,20 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import CreateLink from './components/CreateLink';
 import Header from './components/Header';
 import LinksList from './components/LinksList';
+import Login from './components/Login';
 
 function App() {
   return (
-    <Router>
+    <>
       <Header />
       <Switch>
         <Route path="/" component={LinksList} exact />
         <Route path="/create" component={CreateLink} />
+        <Route path="/login" component={Login} />
       </Switch>
-    </Router>
+    </>
   );
 }
 
