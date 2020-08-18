@@ -8,8 +8,19 @@ const LINKS_QUERY = gql`
     feed {
       links {
         id
+        createdAt
         description
         url
+        postedBy {
+          id
+          name
+        }
+        votes {
+          id
+          user {
+            id
+          }
+        }
       }
     }
   }
@@ -29,10 +40,11 @@ function LinksList() {
 
   return (
     <LinksContainer>
-      {data.feed.links.map((link) => (
+      {data.feed.links.map((link, i) => {
+        const idx = i;
         // eslint-disable-next-line jsx-a11y/anchor-is-valid
-        <Link link={link} />
-      ))}
+        return <Link key={idx} link={link} index={idx + 1} />;
+      })}
     </LinksContainer>
   );
 }
