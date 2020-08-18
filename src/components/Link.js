@@ -13,15 +13,17 @@ const Container = styled.div`
   transition: all 0.5s;
 
   :hover {
-    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.1);
   }
 `;
 
 function Link({ link }) {
   return (
     <Container>
-      {link.description}
-      {link.url}
+      <span style={{ fontSize: '1rem' }}>{link.description}</span>
+      <span style={{ fontSize: '0.8rem', color: '#95959d' }}>
+        &nbsp;&nbsp;&nbsp;&nbsp;({link.url})
+      </span>
     </Container>
   );
 }
