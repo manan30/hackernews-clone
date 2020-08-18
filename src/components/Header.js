@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import { useAuth } from '../context/AuthContext';
+import useDivClickHandler from '../hooks/useDivClickHandler';
 import { AUTH_TOKEN } from '../utils/Constants';
 
 const Container = styled.div`
@@ -42,8 +44,16 @@ const StyledLink = styled(Link)`
 `;
 
 function Header() {
-  const authToken = localStorage.getItem(AUTH_TOKEN);
+  const { authToken, setAuthToken } = useAuth();
   const history = useHistory();
+
+  const handler = () => {
+    localStorage.removeItem(AUTH_TOKEN);
+    setAuthToken('');
+    history.push('/');
+  };
+
+  const divClickHandlers = useDivClickHandler(handler);
 
   return (
     <Container>
@@ -65,14 +75,7 @@ function Header() {
               tabIndex={-1}
               role="button"
               style={{ cursor: 'pointer' }}
-              onClick={() => {
-                localStorage.removeItem(AUTH_TOKEN);
-                history.push('/');
-              }}
-              onKeyUp={() => {
-                localStorage.removeItem(AUTH_TOKEN);
-                history.push('/');
-              }}
+              {...divClickHandlers}
             >
               Logout
             </div>

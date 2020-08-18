@@ -5,6 +5,7 @@
   },
   "extends": [
     "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
     "airbnb",
     "prettier/react",
     "prettier"
@@ -16,9 +17,10 @@
     "ecmaVersion": 11,
     "sourceType": "module"
   },
-  "plugins": ["react", "prettier"],
+  "plugins": ["react", "react-hooks", "prettier"],
   "rules": {
     "no-console": "off",
-    "react/jsx-filename-extension": "off"
+    "react/jsx-filename-extension": "off",
+    "react/jsx-props-no-spreading": "off"
   }
 }

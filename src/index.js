@@ -10,6 +10,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import App from './App';
 import { AUTH_TOKEN } from './utils/Constants';
+import AuthProvider from './context/AuthContext';
 
 const authLink = new ApolloLink((operation, forward) => {
   operation.setContext(({ headers }) => {
@@ -33,7 +34,9 @@ const client = new ApolloClient({
 ReactDOM.render(
   <Router>
     <ApolloProvider client={client}>
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </ApolloProvider>
   </Router>,
   document.getElementById('root')

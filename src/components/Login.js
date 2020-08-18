@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 import { AUTH_TOKEN } from '../utils/Constants';
+import { useAuth } from '../context/AuthContext';
 
 const LOGIN_MUTATION = gql`
   mutation LoginMutation($email: String!, $password: String!) {
@@ -13,9 +14,11 @@ const LOGIN_MUTATION = gql`
 
 function Login() {
   const history = useHistory();
+  const { setAuthToken } = useAuth();
 
   const saveTokenData = (token) => {
     localStorage.setItem(AUTH_TOKEN, token);
+    setAuthToken(token);
     history.push('/');
   };
 
