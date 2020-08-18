@@ -1,8 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { gql, useMutation } from '@apollo/client';
 import { useAuth } from '../context/AuthContext';
 import { timeDifferenceForDate } from '../utils/Constants';
+
+const VOTE_MUTATION = gql`
+  mutation VoteMutation($linkId: ID!) {
+    vote(linkId: $linkId) {
+      id
+      link {
+        id
+        votes {
+          id
+          user {
+            id
+          }
+        }
+      }
+      user {
+        id
+      }
+    }
+  }
+`;
 
 const Container = styled.div`
   width: calc(100% - 2rem);
@@ -22,6 +43,8 @@ const Container = styled.div`
 const UpvoteButton = styled.div`
   height: 0.8rem;
   width: 0.8rem;
+
+  cursor: pointer;
 `;
 
 const Row = styled.div`
@@ -34,15 +57,20 @@ const Row = styled.div`
 `;
 
 function Link({ link, index }) {
+  const [vote, data] = useMutation(VOTE_MUTATION);
   const { authToken } = useAuth();
 
-  console.log(link);
+  const clickHandler = () => {
+    vote({ variables: { linkId: link.id } });
+  };
 
   return (
     <Container>
       <Row style={{ marginBottom: '0.5rem' }}>
         <span>{index}.&nbsp;&nbsp;</span>
-        {authToken && <UpvoteButton>b&nbsp;&nbsp;</UpvoteButton>}
+        {authToken && (
+          <UpvoteButton onClick={clickHandler}>b&nbsp;&nbsp;</UpvoteButton>
+        )}
         <span>&nbsp;{link.description}</span>
         <span style={{ fontSize: '0.6rem', color: '#95959d' }}>
           &nbsp;&nbsp;&nbsp;&nbsp;({link.url})
@@ -65,17 +93,18 @@ function Link({ link, index }) {
 
 Link.propTypes = {
   link: PropTypes.shape({
+    id: PropTypes.string,
     description: PropTypes.string,
     url: PropTypes.string,
-    votes: '',
-    postedBy: '',
-    createdAt: ''
+    votes: PropTypes.arrayOf(PropTypes.any),
+    postedBy: PropTypes.string,
+    createdAt: PropTypes.string
   }),
   index: PropTypes.number.isRequired
 };
 
 Link.defaultProps = {
-  link: { description: '', url: '', votes: '', postedBy: '', createdAt: '' }
+  link: { description: '', url: '', votes: [], postedBy: '', createdAt: '' }
 };
 
 export default Link;
