@@ -68,6 +68,8 @@ function Header() {
       >
         <StyledLink to="/">New</StyledLink>
         <span>|</span>
+        <StyledLink to="/search">Search</StyledLink>
+        <span>|</span>
         <StyledLink to="/create">Submit</StyledLink>
         <div style={{ marginLeft: 'auto' }}>
           {authToken ? (
