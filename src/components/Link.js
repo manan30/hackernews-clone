@@ -28,19 +28,23 @@ const VOTE_MUTATION = gql`
 const Container = styled.div`
   width: calc(100% - 2rem);
   padding: 1rem;
-  margin-top: 1rem;
+  margin-bottom: 1rem;
 
   border-radius: 0.5rem;
   background-color: #fefefe;
 
   transition: all 0.5s;
 
+  :first-child {
+    margin-top: 1rem;
+  }
+
   :hover {
     box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.1);
   }
 `;
 
-const UpvoteButton = styled.div`
+const VoteButton = styled.div`
   height: 0.8rem;
   width: 0.8rem;
 
@@ -56,12 +60,18 @@ const Row = styled.div`
   }
 `;
 
-function Link({ link, index }) {
-  const [vote, data] = useMutation(VOTE_MUTATION);
+function Link({ link, index, updateCache }) {
+  const [vote] = useMutation(VOTE_MUTATION, {
+    update(store, { data: { vote: v } }) {
+      updateCache(store, v, link.id);
+    }
+  });
   const { authToken } = useAuth();
 
   const clickHandler = () => {
-    vote({ variables: { linkId: link.id } });
+    vote({
+      variables: { linkId: link.id }
+    });
   };
 
   return (
@@ -69,7 +79,7 @@ function Link({ link, index }) {
       <Row style={{ marginBottom: '0.5rem' }}>
         <span>{index}.&nbsp;&nbsp;</span>
         {authToken && (
-          <UpvoteButton onClick={clickHandler}>b&nbsp;&nbsp;</UpvoteButton>
+          <VoteButton onClick={clickHandler}>b&nbsp;&nbsp;</VoteButton>
         )}
         <span>&nbsp;{link.description}</span>
         <span style={{ fontSize: '0.6rem', color: '#95959d' }}>

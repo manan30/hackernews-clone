@@ -17,4 +17,5 @@ body {
     Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
 
   box-sizing: border-box;
+  overflow: hidden;
 }
