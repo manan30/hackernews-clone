@@ -15,10 +15,10 @@ import App from './App';
 import { AUTH_TOKEN } from './utils/Constants';
 import AuthProvider from './context/AuthContext';
 
-const URI =
+const URI = (type) =>
   process.env.NODE_ENV === 'production'
-    ? 'gentle-lowlands-39679.herokuapp.com'
-    : 'localhost:4000';
+    ? `${type}s://gentle-lowlands-39679.herokuapp.com`
+    : `${type}://localhost:4000`;
 
 const authLink = new ApolloLink((operation, forward) => {
   operation.setContext(({ headers }) => {
@@ -34,14 +34,14 @@ const authLink = new ApolloLink((operation, forward) => {
 });
 
 const subscriptionLink = new WebSocketLink({
-  uri: `ws://${URI}`,
+  uri: `${URI('ws')}`,
   options: {
     reconnect: true,
     connectionParams: { authToken: localStorage.getItem(AUTH_TOKEN) }
   }
 });
 
-const httpLink = createHttpLink({ uri: `http://${URL}` });
+const httpLink = createHttpLink({ uri: `${URL('http')}` });
 
 const link = split(
   ({ query }) => {
