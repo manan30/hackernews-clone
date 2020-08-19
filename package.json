@@ -12,7 +12,9 @@
     "deploy:prisma": "cd server && yarn prisma deploy",
     "build": "parcel build public/index.html",
     "lint": "eslint src/**/*.js",
+    "lint:server": "eslint server/**/*.js",
     "format": "prettier --write src/**/*",
+    "format:server": "prettier --write server/**/*",
     "clean": "rm -rfd .cache dist"
   },
   "devDependencies": {
