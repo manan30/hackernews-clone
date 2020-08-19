@@ -54,6 +54,16 @@ export const CREATE_LINK_MUTATION = gql`
       createdAt
       description
       url
+      postedBy {
+        id
+        name
+      }
+      votes {
+        id
+        user {
+          id
+        }
+      }
     }
   }
 `;

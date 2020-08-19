@@ -13,36 +13,47 @@ function CreateLink() {
     onCompleted: () => {
       history.push('/new/1');
     },
-    update(store, { data: { post: p } }) {
-      const variables = {
-        first: 6,
-        skip: 0,
-        orderBy: 'createdAt_DESC'
-      };
+    // refetchQueries: [
+    //   {
+    //     query: FEED_QUERY,
+    //     variables: { first: LINKS_PER_PAGE, skip: 0, orderBy: 'createdAt_DESC' }
+    //   }
+    // ]
+    update(store, { data }) {
+      try {
+        const variables = {
+          first: LINKS_PER_PAGE,
+          skip: 0,
+          orderBy: 'createdAt_DESC'
+        };
 
-      const data = store.readQuery({
-        query: FEED_QUERY,
-        variables
-      });
+        const prevState = store.readQuery({
+          query: FEED_QUERY,
+          variables
+        });
 
-      // const newData = {
-      //   ...data,
-      //   feed: {
-      //     ...data.feed,
-      //     count: data.feed.count + 1,
-      //     links: [p, ...data.feed.links.slice(0, data.feed.links.length - 1)]
-      //   }
-      // };
+        if (!prevState) return;
 
-      data.feed.list.unshift(p);
+        const newState = {
+          ...prevState,
+          feed: {
+            ...prevState.feed,
+            count: prevState.feed.count + 1,
+            links: [
+              data.post,
+              ...prevState.feed.links.slice(0, prevState.feed.links.length - 1)
+            ]
+          }
+        };
 
-      console.log({ store, data });
-
-      store.writeQuery({
-        query: FEED_QUERY,
-        data,
-        variables
-      });
+        store.writeQuery({
+          query: FEED_QUERY,
+          variables,
+          data: newState
+        });
+      } catch (e) {
+        console.log(e);
+      }
     }
   });
 

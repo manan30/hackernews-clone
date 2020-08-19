@@ -49,29 +49,35 @@ function Link({ link, index }) {
   const isNewPage = pathname.includes('new');
   const [vote] = useMutation(VOTE_MUTATION, {
     update(store, { data: { vote: v } }) {
-      const page = parseInt(params.page, 10);
+      try {
+        const page = parseInt(params.page, 10);
 
-      const skip = isNewPage ? (page - 1) * LINKS_PER_PAGE : 0;
-      const first = isNewPage ? LINKS_PER_PAGE : 100;
-      const orderBy = isNewPage ? 'createdAt_DESC' : null;
+        const skip = isNewPage ? (page - 1) * LINKS_PER_PAGE : 0;
+        const first = isNewPage ? LINKS_PER_PAGE : 100;
+        const orderBy = isNewPage ? 'createdAt_DESC' : null;
 
-      const data = store.readQuery({
-        query: FEED_QUERY,
-        variables: { first, skip, orderBy }
-      });
+        const data = store.readQuery({
+          query: FEED_QUERY,
+          variables: { first, skip, orderBy }
+        });
 
-      const updatedLinks = data.feed.links.map((l) => {
-        if (l.id === link.id) {
-          return { ...l, votes: v.link.votes };
-        }
-        return link;
-      });
+        const updatedLinks = data.feed.links.map((l) => {
+          if (l.id === link.id) {
+            return { ...l, votes: v.link.votes };
+          }
+          return link;
+        });
 
-      const updatedData = { feed: { links: updatedLinks } };
-      store.writeQuery({
-        query: FEED_QUERY,
-        updatedData
-      });
+        const updatedData = { feed: { ...data.feed, links: updatedLinks } };
+
+        store.writeQuery({
+          query: FEED_QUERY,
+          updatedData,
+          variables: { first, skip, orderBy }
+        });
+      } catch (e) {
+        console.log(e);
+      }
     }
   });
   const { authToken } = useAuth();
