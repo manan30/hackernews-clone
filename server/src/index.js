@@ -25,8 +25,4 @@ const server = new GraphQLServer({
   })
 });
 
-const URL = process.env.PRODUCTION
-  ? 'https://gentle-lowlands-39679.herokuapp.com/'
-  : 'http://localhost:4000';
-
-server.start(() => console.log(`Server is running on ${URL}`));
+server.start(() => console.log(`Server is running on http://localhost:4000`));
