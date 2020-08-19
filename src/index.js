@@ -3,11 +3,14 @@ import {
   ApolloProvider,
   createHttpLink,
   InMemoryCache,
-  ApolloLink
+  ApolloLink,
+  split
 } from '@apollo/client';
+import { WebSocketLink } from '@apollo/client/link/ws';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { getMainDefinition } from '@apollo/client/utilities';
 import App from './App';
 import { AUTH_TOKEN } from './utils/Constants';
 import AuthProvider from './context/AuthContext';
@@ -25,9 +28,27 @@ const authLink = new ApolloLink((operation, forward) => {
   return forward(operation);
 });
 
+const subscriptionLink = new WebSocketLink({
+  uri: 'ws://localhost:4000',
+  options: {
+    reconnect: true,
+    connectionParams: { authToken: localStorage.getItem(AUTH_TOKEN) }
+  }
+});
+
 const httpLink = createHttpLink({ uri: 'http://localhost:4000' });
+
+const link = split(
+  ({ query }) => {
+    const { kind, operation } = getMainDefinition(query);
+    return kind === 'OperationDefinition' && operation === 'subscription';
+  },
+  subscriptionLink,
+  authLink.concat(httpLink)
+);
+
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link,
   cache: new InMemoryCache()
 });
 

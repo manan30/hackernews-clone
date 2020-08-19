@@ -1,8 +1,12 @@
 import { useQuery } from '@apollo/client';
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
 import styled from 'styled-components';
+import {
+  FEED_QUERY,
+  NEW_LINKS_SUBSCRIPTION,
+  NEW_VOTES_SUBSCRIPTION
+} from '../utils/Queries';
 import Link from './Link';
-import { FEED_QUERY } from '../utils/Queries';
 
 const LinksContainer = styled.div`
   height: calc(100vh - 5rem);
@@ -13,7 +17,40 @@ const LinksContainer = styled.div`
 `;
 
 function LinksList() {
-  const { loading, error, data } = useQuery(FEED_QUERY);
+  const { loading, error, data, subscribeToMore } = useQuery(FEED_QUERY);
+
+  const subscribeToNewLinks = useCallback(() => {
+    subscribeToMore({
+      document: NEW_LINKS_SUBSCRIPTION,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const { newLink } = subscriptionData.data;
+        const exists = prev.feed.links.find(({ id }) => id === newLink.id);
+        if (exists) return prev;
+
+        return {
+          ...prev,
+          feed: {
+            links: [newLink, ...prev.feed.links],
+            count: prev.feed.links.length + 1,
+            // eslint-disable-next-line no-underscore-dangle
+            __typename: prev.feed.__typename
+          }
+        };
+      }
+    });
+  }, [subscribeToMore]);
+
+  const subscribeToNewVotes = useCallback(() => {
+    subscribeToMore({
+      document: NEW_VOTES_SUBSCRIPTION
+    });
+  }, [subscribeToMore]);
+
+  useEffect(() => {
+    subscribeToNewLinks();
+    subscribeToNewVotes();
+  }, [subscribeToNewLinks, subscribeToNewVotes]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error...</div>;
