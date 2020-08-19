@@ -1,5 +1,3 @@
-export const AUTH_TOKEN = 'AUTH_TOKEN';
-
 function timeDifference(current, previous) {
   const milliSecondsPerMinute = 60 * 1000;
   const milliSecondsPerHour = milliSecondsPerMinute * 60;
@@ -30,6 +28,10 @@ function timeDifference(current, previous) {
   }
   return `${Math.round(elapsed / milliSecondsPerYear)} years ago`;
 }
+
+export const AUTH_TOKEN = 'AUTH_TOKEN';
+
+export const LINKS_PER_PAGE = '5';
 
 export function timeDifferenceForDate(date) {
   const now = new Date().getTime();
