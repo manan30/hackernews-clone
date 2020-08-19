@@ -31,7 +31,7 @@ function timeDifference(current, previous) {
 
 export const AUTH_TOKEN = 'AUTH_TOKEN';
 
-export const LINKS_PER_PAGE = '5';
+export const LINKS_PER_PAGE = 5;
 
 export function timeDifferenceForDate(date) {
   const now = new Date().getTime();

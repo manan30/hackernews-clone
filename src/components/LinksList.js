@@ -31,14 +31,11 @@ function LinksList() {
     const skip = isNewPage ? (page - 1) * LINKS_PER_PAGE : 0;
     const first = isNewPage ? LINKS_PER_PAGE : 100;
     const orderBy = isNewPage ? 'createdAt_DESC' : null;
-    return { first: parseInt(first, 10), skip, orderBy };
+    return { first, skip, orderBy };
   };
 
   const { loading, error, data, subscribeToMore } = useQuery(FEED_QUERY, {
-    variables: { ...queryVars() },
-    onError: (e) => {
-      console.log(e);
-    }
+    variables: { ...queryVars() }
   });
 
   const subscribeToNewLinks = useCallback(() => {

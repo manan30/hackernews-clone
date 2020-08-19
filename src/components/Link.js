@@ -1,10 +1,11 @@
 import { useMutation } from '@apollo/client';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { useLocation, useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAuth } from '../context/AuthContext';
-import { timeDifferenceForDate } from '../utils/Constants';
-import { VOTE_MUTATION, FEED_QUERY } from '../utils/Queries';
+import { LINKS_PER_PAGE, timeDifferenceForDate } from '../utils/Constants';
+import { FEED_QUERY, VOTE_MUTATION } from '../utils/Queries';
 
 const Container = styled.div`
   width: calc(100% - 2rem);
@@ -42,11 +43,24 @@ const Row = styled.div`
 `;
 
 function Link({ link, index }) {
+  const { pathname } = useLocation();
+  const { params } = useRouteMatch();
+
+  const isNewPage = pathname.includes('new');
   const [vote] = useMutation(VOTE_MUTATION, {
     update(store, { data: { vote: v } }) {
-      const newData = store.readQuery({ query: FEED_QUERY });
+      const page = parseInt(params.page, 10);
 
-      const updatedLinks = newData.feed.links.map((l) => {
+      const skip = isNewPage ? (page - 1) * LINKS_PER_PAGE : 0;
+      const first = isNewPage ? LINKS_PER_PAGE : 100;
+      const orderBy = isNewPage ? 'createdAt_DESC' : null;
+
+      const data = store.readQuery({
+        query: FEED_QUERY,
+        variables: { first, skip, orderBy }
+      });
+
+      const updatedLinks = data.feed.links.map((l) => {
         if (l.id === link.id) {
           return { ...l, votes: v.link.votes };
         }
@@ -54,7 +68,10 @@ function Link({ link, index }) {
       });
 
       const updatedData = { feed: { links: updatedLinks } };
-      store.writeQuery({ query: FEED_QUERY, updatedData });
+      store.writeQuery({
+        query: FEED_QUERY,
+        updatedData
+      });
     }
   });
   const { authToken } = useAuth();
