@@ -71,8 +71,6 @@ function LinksList() {
     subscribeToNewVotes();
   }, [subscribeToNewLinks, subscribeToNewVotes]);
 
-  console.log({ loading, error, data });
-
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error...</div>;
 

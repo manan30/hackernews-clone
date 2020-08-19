@@ -10,10 +10,13 @@
     "start": "parcel public/index.html --open",
     "start:server": "cd server && yarn start",
     "deploy:prisma": "cd server && yarn prisma deploy",
-    "build": "parcel build public/index.html",
+    "build": "parcel build public/index.html --no-source-maps",
     "lint": "eslint src/**/*.js",
+    "lint:server": "eslint server/**/*.js",
     "format": "prettier --write src/**/*",
-    "clean": "rm -rfd .cache dist"
+    "format:server": "prettier --write server/**/*",
+    "clean": "rm -rfd .cache dist",
+    "deploy:server": "ENV='PRODUCTION' git subtree push --prefix server heroku master"
   },
   "devDependencies": {
     "@babel/core": "7.11.1",
